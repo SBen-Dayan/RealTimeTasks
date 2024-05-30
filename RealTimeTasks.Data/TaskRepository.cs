@@ -38,13 +38,14 @@ namespace RealTimeTasks.Data
         public void Claim(int userId, int taskId)
         {
             using var context = new TaskDataContext(_connectionString);
-            var task = context.Tasks.FirstOrDefault(t => t.Id == taskId);
-            if (task == null)
-            {
-                return;
-            }
-            task.UserId = userId;
-            context.SaveChanges();
+            context.Tasks.Where(t => t.Id == taskId).ExecuteUpdate(t => t.SetProperty(t => t.UserId, _ => userId));
+            //var task = context.Tasks.FirstOrDefault(t => t.Id == taskId);
+            //if (task == null)
+            //{
+            //    return;
+            //}
+            //task.UserId = userId;
+            //context.SaveChanges();
         }
 
         public bool CanDelete(int userId, int taskId)
