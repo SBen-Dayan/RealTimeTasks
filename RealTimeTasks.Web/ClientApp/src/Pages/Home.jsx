@@ -23,8 +23,11 @@ export default function Home() {
             await connection.start();
             connectionRef.current = connection;
 
+            connection.on("newTask", value => {
+                setTasks(tasks => [...tasks, value]);
+            })
+
             connection.on('taskUpdate', value => {
-                console.log(value);
                 setTasks(value);
             });
         })();

@@ -27,9 +27,9 @@ namespace RealTimeTasks.Web.Controllers
         [HttpPost("add")]
         public void Add(TitleModel model)
         {
-            var repo = new TaskRepository(_connectionString);
-            repo.Add(new TaskItem { Title = model.Title });
-            SendToAll(repo.GetAll());
+            var task = new TaskItem { Title = model.Title };
+            new TaskRepository(_connectionString).Add(task);
+            _taskHub.Clients.All.SendAsync("newTask", task);
         }
 
         [HttpPost("claim")]
